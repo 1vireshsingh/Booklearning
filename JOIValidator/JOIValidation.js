@@ -3,7 +3,7 @@
 const Joi = require('joi');
 const controllername = require('../BookController/BookList');
 
-const schema = Joi.string().min(2).max(5);
+const schema = Joi.string().min(2).max(15);
 const headerschema = Joi.object().keys({
     //Content-Type: 'application/x-www-form-urlencoded',
       'content-type' : Joi.string().valid(['application/json']).required(),
@@ -62,7 +62,20 @@ const Validateupdaterequest = (req,res) => {
     //controllername.postNewDataInBook(req,res);
 });
 }
+
+const Validatedeleterequest = (req,res) => {
+   Joi.validate(req.query.author,schema,(err,value) => {
+    if(err)
+    res.status(422).json({
+        status: 'error',
+        message: err
+    });
+    else
+    controllername.deleteAuthorRecordFromBook(req,res);
+})
+}
 module.exports.Validategetrequest = Validategetrequest;
 module.exports.Validatepostrequest = Validatepostrequest;
 module.exports.Validateupdaterequest = Validateupdaterequest;
+module.exports.Validatedeleterequest = Validatedeleterequest;
 //const {error, value} = Joi.validate({ a: 'a string' }, schema);
